@@ -286,6 +286,43 @@ async function initSetupFlow() {
     progressBar.style.width = "0%";
     setPlayAvailability(false);
 
+    // If a URL is provided, download in the main thread (workers can't fetch here)
+    if (url) {
+      try {
+        progressLabel.textContent = "Connecting to download server…";
+        const response = await fetch(url);
+        if (!response.ok) {
+          showError(`Download failed: HTTP ${response.status} ${response.statusText}`);
+          document.querySelectorAll(".setup-actions-panel").forEach((el) => (el.style.opacity = "1"));
+          return;
+        }
+        const contentLength = parseInt(response.headers.get("content-length") || "0");
+        const reader = response.body.getReader();
+        const chunks = [];
+        let loaded = 0;
+        progressLabel.textContent = "Downloading game archive…";
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+          loaded += value.byteLength;
+          if (contentLength > 0) {
+            const pct = Math.round((loaded / contentLength) * 80);
+            progressBar.style.width = `${pct}%`;
+            progressPercent.textContent = `${pct}%`;
+          }
+        }
+        file = new Blob(chunks, { type: "application/gzip" });
+        progressLabel.textContent = "Download complete. Installing…";
+        progressBar.style.width = "80%";
+        progressPercent.textContent = "80%";
+      } catch (err) {
+        showError(`Download failed: ${err.message}`);
+        document.querySelectorAll(".setup-actions-panel").forEach((el) => (el.style.opacity = "1"));
+        return;
+      }
+    }
+
     const worker = new Worker(`${BASE}extract-worker.js`);
     worker.onerror = (error) => {
       console.error("[worker error]", error);
@@ -294,11 +331,7 @@ async function initSetupFlow() {
         .querySelectorAll(".setup-actions-panel")
         .forEach((element) => (element.style.opacity = "1"));
     };
-    if (url) {
-      worker.postMessage({ url });
-    } else {
-      worker.postMessage({ file });
-    }
+    worker.postMessage({ file });
     worker.onmessage = async (event) => {
       const message = event.data;
       console.log(
@@ -306,20 +339,21 @@ async function initSetupFlow() {
         message.type,
         message.phase || "",
         message.pct || "",
+        message.message || "",
       );
 
       if (message.type === "progress") {
-        progressBar.style.width = `${message.pct}%`;
-        progressPercent.textContent = `${message.pct}%`;
+        const overallPct = 80 + Math.round(message.pct * 0.2);
+        progressBar.style.width = `${overallPct}%`;
+        progressPercent.textContent = `${overallPct}%`;
         const labels = {
-          downloading: "Downloading game archive…",
-          reading: "Reading archive…",
-          decompressing: "Decompressing archive…",
-          extracting: `Extracting files… ${message.done || 0} / ${
+          reading: "Installing: reading archive…",
+          decompressing: "Installing: decompressing…",
+          extracting: `Installing: extracting files… ${message.done || 0} / ${
             message.total || ""
           }`,
         };
-        progressLabel.textContent = labels[message.phase] || "Working…";
+        progressLabel.textContent = labels[message.phase] || "Installing…";
         return;
       }
 
@@ -399,9 +433,9 @@ async function initSetupFlow() {
   setStorageStatus("Import required", "missing");
 
   if (ASSET_RELEASE_URL) {
-    const proxyUrl = `${BASE}proxy-game-download/game.tar.gz`;
-    console.log("[setup] auto-downloading game via proxy:", proxyUrl);
-    await runImport(null, proxyUrl);
+    const downloadUrl = `${BASE}proxy-game-download/game.tar.gz`;
+    console.log("[setup] auto-downloading game from:", downloadUrl);
+    await runImport(null, downloadUrl);
   } else {
     console.log("[setup] no asset URL configured, waiting for file selection");
 
