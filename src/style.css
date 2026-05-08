@@ -144,9 +144,31 @@ a:hover { color: #fff; }
 }
 
 .hero-desc {
-  margin: 0;
+  margin: 0 0 16px;
   font-size: clamp(0.9rem, 2.5vw, 1.05rem);
   color: rgba(200,215,255,0.75);
+  letter-spacing: 0.01em;
+}
+
+/* ─── Hero badges ─────────────────────────────────────────── */
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: rgba(220,230,255,0.9);
+  font-size: 0.78rem;
+  font-weight: 600;
+  backdrop-filter: blur(6px);
   letter-spacing: 0.01em;
 }
 
@@ -535,6 +557,75 @@ a:hover { color: #fff; }
 @media (max-width: 860px) {
   .cover-image { height: 300px; }
 }
+
+/* ─── Features panel ─────────────────────────────────────── */
+.features-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.features-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+.feat-icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* ─── Game info card ──────────────────────────────────────── */
+.game-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  margin: 0;
+}
+
+.game-meta dt {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-3);
+  white-space: nowrap;
+  padding-top: 1px;
+}
+
+.game-meta dd {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-1);
+}
+
+/* ─── Footer ──────────────────────────────────────────────── */
+.site-footer {
+  margin-top: 40px;
+  padding: 20px 0 8px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--text-3);
+  line-height: 1.7;
+}
+
+.site-footer a {
+  color: var(--text-2);
+}
+.site-footer a:hover { color: var(--cyan); }
 
 /* ─── Disclaimer / credits ────────────────────────────────── */
 .label-tag {
