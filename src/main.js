@@ -240,7 +240,7 @@ async function initSetupFlow() {
   downloadLink.href = ASSET_RELEASE_URL;
 
   const showError = (message) => {
-    errorBox.style.display = "block";
+    errorBox.classList.remove("hidden");
     errorBox.textContent = message;
   };
 
@@ -266,8 +266,8 @@ async function initSetupFlow() {
       await resetGameData();
       setStorageStatus("Import required", "missing");
       setPlayAvailability(false);
-      progress.style.display = "none";
-      errorBox.style.display = "none";
+      progress.classList.add("hidden");
+      errorBox.classList.add("hidden");
       selectedFileName.textContent = "No file selected";
       fileInput.value = "";
       resetBtn.disabled = false;
@@ -276,11 +276,11 @@ async function initSetupFlow() {
   }
 
   const runImport = async (file, url) => {
-    errorBox.style.display = "none";
+    errorBox.classList.add("hidden");
     document
       .querySelectorAll(".setup-actions-panel")
       .forEach((element) => (element.style.opacity = "0.5"));
-    progress.style.display = "block";
+    progress.classList.remove("hidden");
     progressLabel.textContent = url ? "Starting download…" : "Reading file…";
     progressPercent.textContent = "0%";
     progressBar.style.width = "0%";
@@ -378,7 +378,7 @@ async function initSetupFlow() {
       }
 
       if (message.type === "error") {
-        errorBox.style.display = "block";
+        errorBox.classList.remove("hidden");
         errorBox.textContent = `Error: ${message.message}`;
         document
           .querySelectorAll(".setup-actions-panel")
@@ -426,7 +426,7 @@ async function initSetupFlow() {
   if (ready) {
     setStorageStatus("Ready to play", "ready");
     setPlayAvailability(true);
-    progress.style.display = "none";
+    progress.classList.add("hidden");
     return;
   }
 
@@ -518,7 +518,7 @@ async function boot() {
       storageStatus.dataset.state = "error";
     }
     if (errorBox) {
-      errorBox.style.display = "block";
+      errorBox.classList.remove("hidden");
       errorBox.textContent = `Your browser is missing required features: ${missing.join(", ")}. Please use Chrome 110+, Firefox 111+, or Safari 16.4+.`;
     }
     return;
