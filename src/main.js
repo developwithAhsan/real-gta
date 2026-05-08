@@ -323,69 +323,75 @@ async function initSetupFlow() {
       }
     }
 
-    const worker = new Worker(`${BASE}extract-worker.js`);
-    worker.onerror = (error) => {
-      console.error("[worker error]", error);
-      showError(`Worker error: ${error.message}`);
-      document
-        .querySelectorAll(".setup-actions-panel")
-        .forEach((element) => (element.style.opacity = "1"));
-    };
-    worker.postMessage({ file });
-    worker.onmessage = async (event) => {
-      const message = event.data;
-      console.log(
-        "[worker]",
-        message.type,
-        message.phase || "",
-        message.pct || "",
-        message.message || "",
-      );
-
-      if (message.type === "progress") {
-        const overallPct = 80 + Math.round(message.pct * 0.2);
-        progressBar.style.width = `${overallPct}%`;
-        progressPercent.textContent = `${overallPct}%`;
-        const labels = {
-          reading: "Installing: reading archive…",
-          decompressing: "Installing: decompressing…",
-          extracting: `Installing: extracting files… ${message.done || 0} / ${
-            message.total || ""
-          }`,
-        };
-        progressLabel.textContent = labels[message.phase] || "Installing…";
-        return;
-      }
-
-      if (message.type === "done") {
-        progressBar.style.width = "100%";
-        progressPercent.textContent = "100%";
-        progressLabel.textContent = "Import complete. Verifying files…";
-        const { ready: isReady, reason } = await waitForGameReady();
-        setStorageStatus(
-          isReady ? "Ready to play" : "Import required",
-          isReady ? "ready" : "missing",
+    await new Promise((resolve) => {
+      const worker = new Worker(`${BASE}extract-worker.js`);
+      worker.onerror = (error) => {
+        console.error("[worker error]", error);
+        showError(`Worker error: ${error.message}`);
+        document
+          .querySelectorAll(".setup-actions-panel")
+          .forEach((element) => (element.style.opacity = "1"));
+        worker.terminate();
+        resolve();
+      };
+      worker.postMessage({ file });
+      worker.onmessage = async (event) => {
+        const message = event.data;
+        console.log(
+          "[worker]",
+          message.type,
+          message.phase || "",
+          message.pct || "",
+          message.message || "",
         );
-        setPlayAvailability(isReady);
-        progressLabel.textContent = isReady
-          ? "Import complete. Ready to play."
-          : `Verification failed: ${reason}`;
-        document
-          .querySelectorAll(".setup-actions-panel")
-          .forEach((element) => (element.style.opacity = "1"));
-        worker.terminate();
-        return;
-      }
 
-      if (message.type === "error") {
-        errorBox.classList.remove("hidden");
-        errorBox.textContent = `Error: ${message.message}`;
-        document
-          .querySelectorAll(".setup-actions-panel")
-          .forEach((element) => (element.style.opacity = "1"));
-        worker.terminate();
-      }
-    };
+        if (message.type === "progress") {
+          const overallPct = 80 + Math.round(message.pct * 0.2);
+          progressBar.style.width = `${overallPct}%`;
+          progressPercent.textContent = `${overallPct}%`;
+          const labels = {
+            reading: "Installing: reading archive…",
+            decompressing: "Installing: decompressing…",
+            extracting: `Installing: extracting files… ${message.done || 0} / ${
+              message.total || ""
+            }`,
+          };
+          progressLabel.textContent = labels[message.phase] || "Installing…";
+          return;
+        }
+
+        if (message.type === "done") {
+          progressBar.style.width = "100%";
+          progressPercent.textContent = "100%";
+          progressLabel.textContent = "Installation complete. Verifying files…";
+          const { ready: isReady, reason } = await waitForGameReady();
+          setStorageStatus(
+            isReady ? "Ready to play" : "Installation failed",
+            isReady ? "ready" : "missing",
+          );
+          setPlayAvailability(isReady);
+          progressLabel.textContent = isReady
+            ? "Installation complete. Starting game…"
+            : `Verification failed: ${reason}`;
+          document
+            .querySelectorAll(".setup-actions-panel")
+            .forEach((element) => (element.style.opacity = "1"));
+          worker.terminate();
+          resolve();
+          return;
+        }
+
+        if (message.type === "error") {
+          errorBox.classList.remove("hidden");
+          errorBox.textContent = `Error: ${message.message}`;
+          document
+            .querySelectorAll(".setup-actions-panel")
+            .forEach((element) => (element.style.opacity = "1"));
+          worker.terminate();
+          resolve();
+        }
+      };
+    });
   };
 
   setPlayAvailability(false);
@@ -430,7 +436,7 @@ async function initSetupFlow() {
     return;
   }
 
-  setStorageStatus("Import required", "missing");
+  setStorageStatus("Downloading game…", "downloading");
 
   if (ASSET_RELEASE_URL) {
     const downloadUrl = `${BASE}proxy-game-download/game.tar.gz`;
@@ -526,6 +532,14 @@ async function boot() {
 
   await initSetupFlow();
   await loadLegacyScripts();
+
+  if (window.__gtaGameReady === true) {
+    const btn = document.getElementById("click-to-play-button");
+    if (btn && !btn.disabled) {
+      console.log("[setup] auto-starting game…");
+      btn.click();
+    }
+  }
 }
 
 if (document.readyState === "loading") {
