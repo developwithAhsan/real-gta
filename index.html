@@ -8,7 +8,7 @@
     <title>Play GTA Vice City Online Free in Browser | No Download Needed</title>
     <meta name="description" content="Play GTA Vice City online free in your browser — no download or installation required. The full game runs via WebAssembly on desktop and mobile. One-time setup, then instant load every visit." />
     <meta name="keywords" content="GTA vice city online browser free, play GTA vice city online free, grand theft auto vice city browser, GTA vice city no download, GTA vice city free online, GTA vice city web browser game, play GTA online free, GTA vice city WASM" />
-    <meta name="author" content="reVCDOS WASM Port" />
+    <meta name="author" content="GTA Vice City Online" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="theme-color" content="#06080f" />
 
@@ -109,7 +109,7 @@
           "name": "Is GTA Vice City online browser free to play?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, playing GTA Vice City in browser is completely free. This is an open-source WebAssembly port and requires no payment, account, or subscription."
+            "text": "Yes, playing GTA Vice City in browser is completely free. This WebAssembly port requires no payment, account, or subscription."
           }
         }
       ]
@@ -129,6 +129,9 @@
 
     <link rel="icon" type="image/webp" href="/icon.webp" />
     <link rel="preload" as="image" href="/poster.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/src/style.css" />
   </head>
 
@@ -168,6 +171,22 @@
     </div>
 
     <div class="page-wrap">
+
+      <!-- Top nav -->
+      <nav class="top-nav" role="navigation" aria-label="Main navigation">
+        <div class="top-nav-inner">
+          <a class="nav-brand" href="/" aria-label="GTA Vice City Online — Home">
+            <span class="nav-brand-vc">VC</span>
+            <span class="nav-brand-name">Vice City <span class="nav-brand-online">Online</span></span>
+          </a>
+          <div class="nav-links">
+            <a href="#main-content" class="nav-link">Play</a>
+            <a href="#faq" class="nav-link">FAQ</a>
+            <a href="/privacy.html" class="nav-link">Privacy</a>
+            <a href="/terms.html" class="nav-link">Terms</a>
+          </div>
+        </div>
+      </nav>
 
       <!-- Hero -->
       <header class="hero" role="banner">
@@ -257,7 +276,7 @@
           </section>
 
           <!-- FAQ Section — triggers Google featured snippets -->
-          <section class="card faq-panel" aria-label="Frequently asked questions about GTA Vice City online">
+          <section class="card faq-panel" id="faq" aria-label="Frequently asked questions about GTA Vice City online">
             <h2 class="card-title">Frequently Asked Questions</h2>
             <div class="faq-list">
 
@@ -288,7 +307,7 @@
 
               <details class="faq-item">
                 <summary class="faq-q">Is this really free? Any catch?</summary>
-                <p class="faq-a">Completely free — no payment, account, subscription, or ads. This is an open-source WebAssembly port of GTA Vice City, not affiliated with Rockstar Games.</p>
+                <p class="faq-a">Completely free — no payment, account, subscription, or ads. This is a browser-based WebAssembly port of GTA Vice City, not affiliated with Rockstar Games.</p>
               </details>
 
             </div>
@@ -336,7 +355,7 @@
 
           <div class="card disclaimer">
             <span class="label-tag">Disclaimer</span>
-            <p>This is an open-source fan port of GTA: Vice City. Not a commercial release. Not affiliated with or endorsed by Rockstar Games. (<a href="https://github.com/SugaryHull/re3/tree/miami" target="_blank" rel="noopener noreferrer">source</a>)</p>
+            <p>This is an independent browser port of GTA: Vice City. Not a commercial release. Not affiliated with or endorsed by Rockstar Games or Take-Two Interactive.</p>
           </div>
         </aside>
 
@@ -344,10 +363,9 @@
 
       <footer class="site-footer" role="contentinfo">
         <p>
-          <strong>GTA Vice City Online — Free Browser Game</strong> &mdash;
-          Play GTA Vice City free in your browser with no download required.
-          Open-source WASM port based on <a href="https://github.com/Lolendor/reVCDOS" target="_blank" rel="noopener noreferrer">reVCDOS</a>.
-          Not affiliated with Rockstar Games.
+          <strong>GTA Vice City Online</strong> &mdash;
+          Play GTA Vice City free in your browser. No download required.
+          Not affiliated with Rockstar Games or Take-Two Interactive.
         </p>
         <p class="footer-links">
           <a href="/privacy.html">Privacy Policy</a>
