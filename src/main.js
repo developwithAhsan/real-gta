@@ -277,93 +277,48 @@ async function initSetupFlow() {
 
   const runImport = async (file, url) => {
     errorBox.classList.add("hidden");
-    document
-      .querySelectorAll(".setup-actions-panel")
-      .forEach((element) => (element.style.opacity = "0.5"));
     progress.classList.remove("hidden");
-    progressLabel.textContent = url ? "Starting download…" : "Reading file…";
+    progressLabel.textContent = "Connecting…";
     progressPercent.textContent = "0%";
     progressBar.style.width = "0%";
     setPlayAvailability(false);
-
-    // If a URL is provided, download in the main thread (workers can't fetch here)
-    if (url) {
-      try {
-        progressLabel.textContent = "Connecting to download server…";
-        const response = await fetch(url);
-        if (!response.ok) {
-          showError(`Download failed: HTTP ${response.status} ${response.statusText}`);
-          document.querySelectorAll(".setup-actions-panel").forEach((el) => (el.style.opacity = "1"));
-          return;
-        }
-        const contentLength = parseInt(response.headers.get("content-length") || "0");
-        const reader = response.body.getReader();
-        const chunks = [];
-        let loaded = 0;
-        progressLabel.textContent = "Downloading game archive…";
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          chunks.push(value);
-          loaded += value.byteLength;
-          if (contentLength > 0) {
-            const pct = Math.round((loaded / contentLength) * 80);
-            progressBar.style.width = `${pct}%`;
-            progressPercent.textContent = `${pct}%`;
-          }
-        }
-        file = new Blob(chunks, { type: "application/gzip" });
-        progressLabel.textContent = "Download complete. Installing…";
-        progressBar.style.width = "80%";
-        progressPercent.textContent = "80%";
-      } catch (err) {
-        showError(`Download failed: ${err.message}`);
-        document.querySelectorAll(".setup-actions-panel").forEach((el) => (el.style.opacity = "1"));
-        return;
-      }
-    }
 
     await new Promise((resolve) => {
       const worker = new Worker(`${BASE}extract-worker.js`);
       worker.onerror = (error) => {
         console.error("[worker error]", error);
         showError(`Worker error: ${error.message}`);
-        document
-          .querySelectorAll(".setup-actions-panel")
-          .forEach((element) => (element.style.opacity = "1"));
         worker.terminate();
         resolve();
       };
-      worker.postMessage({ file });
+      worker.postMessage(url ? { url } : { file });
       worker.onmessage = async (event) => {
-        const message = event.data;
-        console.log(
-          "[worker]",
-          message.type,
-          message.phase || "",
-          message.pct || "",
-          message.message || "",
-        );
+        const msg = event.data;
 
-        if (message.type === "progress") {
-          const overallPct = 80 + Math.round(message.pct * 0.2);
-          progressBar.style.width = `${overallPct}%`;
-          progressPercent.textContent = `${overallPct}%`;
-          const labels = {
-            reading: "Installing: reading archive…",
-            decompressing: "Installing: decompressing…",
-            extracting: `Installing: extracting files… ${message.done || 0} / ${
-              message.total || ""
-            }`,
-          };
-          progressLabel.textContent = labels[message.phase] || "Installing…";
+        if (msg.type === "progress") {
+          progressBar.style.width = `${msg.pct}%`;
+          progressPercent.textContent = `${msg.pct}%`;
+
+          if (msg.phase === "downloading" || msg.phase === "reading") {
+            if (msg.total > 0) {
+              const loadedMB = (msg.loaded / 1048576).toFixed(0);
+              const totalMB = (msg.total / 1048576).toFixed(0);
+              progressLabel.textContent = `Downloading… ${loadedMB} MB / ${totalMB} MB`;
+            } else {
+              progressLabel.textContent = "Connecting to download server…";
+            }
+          } else if (msg.phase === "decompressing") {
+            progressLabel.textContent = "Decompressing archive…";
+          } else if (msg.phase === "extracting") {
+            progressLabel.textContent = `Installing files… ${msg.done || 0} / ${msg.total || ""}`;
+          }
           return;
         }
 
-        if (message.type === "done") {
+        if (msg.type === "done") {
           progressBar.style.width = "100%";
           progressPercent.textContent = "100%";
-          progressLabel.textContent = "Installation complete. Verifying files…";
+          progressLabel.textContent = "Verifying installation…";
           const { ready: isReady, reason } = await waitForGameReady();
           setStorageStatus(
             isReady ? "Ready to play" : "Installation failed",
@@ -371,22 +326,15 @@ async function initSetupFlow() {
           );
           setPlayAvailability(isReady);
           progressLabel.textContent = isReady
-            ? "Installation complete. Starting game…"
+            ? "Installation complete — starting game…"
             : `Verification failed: ${reason}`;
-          document
-            .querySelectorAll(".setup-actions-panel")
-            .forEach((element) => (element.style.opacity = "1"));
           worker.terminate();
           resolve();
           return;
         }
 
-        if (message.type === "error") {
-          errorBox.classList.remove("hidden");
-          errorBox.textContent = `Error: ${message.message}`;
-          document
-            .querySelectorAll(".setup-actions-panel")
-            .forEach((element) => (element.style.opacity = "1"));
+        if (msg.type === "error") {
+          showError(`Error: ${msg.message}`);
           worker.terminate();
           resolve();
         }

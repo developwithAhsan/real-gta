@@ -358,7 +358,6 @@ a:hover {
 
 /* ─── Import progress ────────────────────────────────────────── */
 #setup-progress {
-  display: none;
   margin-top: 16px;
 }
 
@@ -409,7 +408,6 @@ a:hover {
   color: var(--danger);
   font-size: 0.88rem;
   margin-top: 12px;
-  display: none;
   line-height: 1.6;
 }
 

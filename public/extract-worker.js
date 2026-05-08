@@ -13,10 +13,7 @@ function* parseTarEntries(buffer) {
     while (offset + 512 <= view.length) {
         let allZero = true;
         for (let i = 0; i < 512; i++) {
-            if (view[offset + i] !== 0) {
-                allZero = false;
-                break;
-            }
+            if (view[offset + i] !== 0) { allZero = false; break; }
         }
         if (allZero) break;
 
@@ -49,10 +46,7 @@ function* parseTarEntries(buffer) {
         name = name.replace(/\0/g, '').replace(/\/$/, '');
         if (shouldIgnoreEntry(name)) continue;
 
-        yield {
-            name,
-            data: view.subarray(dataOffset, dataOffset + size),
-        };
+        yield { name, data: view.subarray(dataOffset, dataOffset + size) };
     }
 }
 
@@ -93,6 +87,10 @@ async function writeToOPFS(name, data) {
     await writable.close();
 }
 
+function fmtMB(bytes) {
+    return (bytes / (1024 * 1024)).toFixed(0);
+}
+
 self.onmessage = async (event) => {
     const { file, url } = event.data;
     try {
@@ -101,36 +99,36 @@ self.onmessage = async (event) => {
         let totalSize = 0;
 
         if (url) {
-            self.postMessage({ type: 'progress', phase: 'downloading', pct: 0 });
+            self.postMessage({ type: 'progress', phase: 'downloading', pct: 0, loaded: 0, total: 0 });
             let response;
             try {
-                response = await fetch(url, { mode: 'cors', credentials: 'omit' });
+                response = await fetch(url);
             } catch (err) {
-                const msg = `Download failed: ${err.name}: ${err.message} (url=${url})`;
-                console.error('[worker fetch error]', msg, err);
-                self.postMessage({ type: 'error', message: msg });
+                self.postMessage({ type: 'error', message: `Download failed: ${err.message}` });
                 return;
             }
             if (!response.ok) {
-                const msg = `Download failed: HTTP ${response.status} ${response.statusText} for ${url}`;
-                console.error('[worker response error]', msg);
-                self.postMessage({ type: 'error', message: msg });
+                self.postMessage({ type: 'error', message: `Download failed: HTTP ${response.status}` });
                 return;
             }
             totalSize = parseInt(response.headers.get('content-length') || '0');
             const reader = response.body.getReader();
+            let lastPct = -1;
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
                 chunks.push(value);
                 loaded += value.byteLength;
                 if (totalSize > 0) {
-                    const pct = Math.round((loaded / totalSize) * 10);
-                    self.postMessage({ type: 'progress', phase: 'downloading', pct });
+                    const pct = Math.round((loaded / totalSize) * 70);
+                    if (pct !== lastPct) {
+                        lastPct = pct;
+                        self.postMessage({ type: 'progress', phase: 'downloading', pct, loaded, total: totalSize });
+                    }
                 }
             }
         } else {
-            self.postMessage({ type: 'progress', phase: 'reading', pct: 0 });
+            self.postMessage({ type: 'progress', phase: 'reading', pct: 0, loaded: 0, total: 0 });
             totalSize = file.size;
             const reader = file.stream().getReader();
             while (true) {
@@ -138,8 +136,8 @@ self.onmessage = async (event) => {
                 if (done) break;
                 chunks.push(value);
                 loaded += value.byteLength;
-                const pct = Math.round((loaded / totalSize) * 10);
-                self.postMessage({ type: 'progress', phase: 'reading', pct });
+                const pct = Math.round((loaded / totalSize) * 70);
+                self.postMessage({ type: 'progress', phase: 'reading', pct, loaded, total: totalSize });
             }
         }
 
@@ -150,21 +148,19 @@ self.onmessage = async (event) => {
             readOffset += chunk.byteLength;
         }
 
-        self.postMessage({ type: 'progress', phase: 'decompressing', pct: 10 });
+        self.postMessage({ type: 'progress', phase: 'decompressing', pct: 72 });
         const tarBuffer = await decompressGzip(compressed.buffer);
 
-        self.postMessage({ type: 'progress', phase: 'extracting', pct: 30 });
+        self.postMessage({ type: 'progress', phase: 'extracting', pct: 75 });
         let total = 0;
-        for (const _entry of parseTarEntries(tarBuffer)) {
-            total++;
-        }
+        for (const _entry of parseTarEntries(tarBuffer)) { total++; }
         let done = 0;
 
         for (const entry of parseTarEntries(tarBuffer)) {
             await writeToOPFS(entry.name, entry.data);
             done++;
-            if (done % 200 === 0 || done === total) {
-                const pct = 30 + Math.round((done / total) * 65);
+            if (done % 100 === 0 || done === total) {
+                const pct = 75 + Math.round((done / total) * 24);
                 self.postMessage({ type: 'progress', phase: 'extracting', pct, done, total });
             }
         }
@@ -177,7 +173,7 @@ self.onmessage = async (event) => {
 
         self.postMessage({ type: 'done' });
     } catch (err) {
-        console.error('[worker outer catch]', err.name, err.message, err);
+        console.error('[worker]', err.name, err.message, err);
         self.postMessage({ type: 'error', message: `${err.name}: ${err.message}` });
     }
 };
