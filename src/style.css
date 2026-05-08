@@ -713,6 +713,29 @@ a:hover { color: #fff; }
 }
 .site-footer a:hover { color: var(--cyan); }
 
+.footer-links {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.footer-sep {
+  color: var(--text-3);
+  font-size: 0.75rem;
+}
+
+.footer-links a {
+  font-size: 0.8rem;
+  color: var(--text-2);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.footer-links a:hover { color: var(--cyan); }
+
 /* ─── Disclaimer / credits ────────────────────────────────── */
 .label-tag {
   display: inline-block;
