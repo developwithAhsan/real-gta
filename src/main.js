@@ -275,6 +275,16 @@ async function initSetupFlow() {
     });
   }
 
+  const formatTimeRemaining = (seconds) => {
+    if (!isFinite(seconds) || seconds <= 0) return "";
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    if (m >= 60) return `~${Math.floor(m / 60)}h ${m % 60}m remaining`;
+    if (m > 0) return `~${m}m ${s}s remaining`;
+    if (seconds < 5) return "almost done…";
+    return `~${s}s remaining`;
+  };
+
   const runImport = async (file, url) => {
     errorBox.classList.add("hidden");
     progress.classList.remove("hidden");
@@ -282,6 +292,9 @@ async function initSetupFlow() {
     progressPercent.textContent = "0%";
     progressBar.style.width = "0%";
     setPlayAvailability(false);
+
+    let downloadStartTime = null;
+    let extractStartTime = null;
 
     await new Promise((resolve) => {
       const worker = new Worker(`${BASE}extract-worker.js`);
@@ -301,16 +314,31 @@ async function initSetupFlow() {
 
           if (msg.phase === "downloading" || msg.phase === "reading") {
             if (msg.total > 0) {
+              if (!downloadStartTime) downloadStartTime = Date.now();
               const loadedMB = (msg.loaded / 1048576).toFixed(0);
               const totalMB = (msg.total / 1048576).toFixed(0);
-              progressLabel.textContent = `Downloading… ${loadedMB} MB / ${totalMB} MB`;
+              const elapsedSec = (Date.now() - downloadStartTime) / 1000;
+              const speed = elapsedSec > 0 ? msg.loaded / elapsedSec : 0;
+              const remainingSec = speed > 0 ? (msg.total - msg.loaded) / speed : Infinity;
+              const eta = formatTimeRemaining(remainingSec);
+              const label = msg.phase === "reading" ? "Reading" : "Downloading";
+              progressLabel.textContent = `${label}… ${loadedMB} MB / ${totalMB} MB${eta ? "  •  " + eta : ""}`;
             } else {
               progressLabel.textContent = "Connecting to download server…";
             }
           } else if (msg.phase === "decompressing") {
             progressLabel.textContent = "Decompressing archive…";
           } else if (msg.phase === "extracting") {
-            progressLabel.textContent = `Installing files… ${msg.done || 0} / ${msg.total || ""}`;
+            if (!extractStartTime) extractStartTime = Date.now();
+            const done = msg.done || 0;
+            const total = msg.total || 0;
+            let eta = "";
+            if (done > 0 && total > 0) {
+              const elapsedSec = (Date.now() - extractStartTime) / 1000;
+              const remainingSec = elapsedSec > 0 ? (elapsedSec / done) * (total - done) : Infinity;
+              eta = formatTimeRemaining(remainingSec);
+            }
+            progressLabel.textContent = `Installing files… ${done} / ${total || ""}${eta ? "  •  " + eta : ""}`;
           }
           return;
         }
