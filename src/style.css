@@ -607,6 +607,92 @@ a:hover { color: #fff; }
   color: var(--text-1);
 }
 
+/* ─── FAQ accordion ───────────────────────────────────────── */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.faq-item {
+  border: 1px solid var(--border);
+  border-radius: var(--r-inner);
+  background: var(--surface-2);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.faq-item[open] {
+  border-color: rgba(255,40,110,0.25);
+}
+
+.faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-1);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  transition: color 0.15s;
+}
+
+.faq-q::-webkit-details-marker { display: none; }
+
+.faq-q::after {
+  content: "+";
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--pink);
+  transition: transform 0.2s;
+  line-height: 1;
+}
+
+.faq-item[open] .faq-q::after {
+  transform: rotate(45deg);
+}
+
+.faq-q:hover { color: var(--cyan); }
+
+.faq-a {
+  margin: 0;
+  padding: 0 16px 14px;
+  font-size: 0.86rem;
+  line-height: 1.75;
+  color: var(--text-2);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  padding-top: 10px;
+}
+
+/* ─── Browser support card ────────────────────────────────── */
+.browser-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.browser-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.86rem;
+  color: var(--text-2);
+}
+
+.browser-icon {
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
 /* ─── Footer ──────────────────────────────────────────────── */
 .site-footer {
   margin-top: 40px;

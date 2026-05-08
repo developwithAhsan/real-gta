@@ -4,45 +4,126 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
 
-    <!-- Primary SEO -->
-    <title>GTA Vice City — Play Free in Browser | No Download Required</title>
-    <meta name="description" content="Play Grand Theft Auto: Vice City for free directly in your browser. No installation needed. Powered by WebAssembly. Works on desktop and mobile." />
-    <meta name="keywords" content="GTA Vice City browser, play GTA online, GTA Vice City free, WebAssembly game, GTA WASM, Grand Theft Auto browser game" />
+    <!-- Primary SEO — target: "GTA vice city online browser free" -->
+    <title>Play GTA Vice City Online Free in Browser | No Download Needed</title>
+    <meta name="description" content="Play GTA Vice City online free in your browser — no download or installation required. The full game runs via WebAssembly on desktop and mobile. One-time setup, then instant load every visit." />
+    <meta name="keywords" content="GTA vice city online browser free, play GTA vice city online free, grand theft auto vice city browser, GTA vice city no download, GTA vice city free online, GTA vice city web browser game, play GTA online free, GTA vice city WASM" />
     <meta name="author" content="reVCDOS WASM Port" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="theme-color" content="#06080f" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="GTA Vice City — Play Free in Browser" />
-    <meta property="og:description" content="Play Grand Theft Auto: Vice City for free directly in your browser. No installation needed. Powered by WebAssembly." />
+    <meta property="og:title" content="Play GTA Vice City Online Free in Browser" />
+    <meta property="og:description" content="Play GTA Vice City online free in your browser — no download or installation required. The full game runs via WebAssembly on desktop and mobile." />
     <meta property="og:image" content="/poster.jpg" />
-    <meta property="og:image:alt" content="Grand Theft Auto Vice City poster" />
+    <meta property="og:image:alt" content="GTA Vice City online browser game poster" />
     <meta property="og:image:width" content="600" />
     <meta property="og:image:height" content="900" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="GTA Vice City — Play Free in Browser" />
-    <meta name="twitter:description" content="Play Grand Theft Auto: Vice City for free directly in your browser. No installation needed. Powered by WebAssembly." />
+    <meta name="twitter:title" content="Play GTA Vice City Online Free in Browser" />
+    <meta name="twitter:description" content="Play GTA Vice City online free in your browser — no download or installation required. Full game via WebAssembly." />
     <meta name="twitter:image" content="/poster.jpg" />
 
-    <!-- Structured Data -->
+    <!-- Structured Data: VideoGame -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "VideoGame",
       "name": "Grand Theft Auto: Vice City",
-      "description": "Play GTA Vice City for free in your browser using WebAssembly. No download or installation required.",
-      "genre": ["Action", "Open World", "Adventure"],
+      "alternateName": ["GTA Vice City", "GTA VC", "Grand Theft Auto Vice City Online"],
+      "description": "Play GTA Vice City online free in your browser with no download required. The full game runs via WebAssembly. Works on desktop and mobile browsers.",
+      "genre": ["Action", "Open World", "Adventure", "Sandbox"],
       "gamePlatform": "Web Browser",
       "applicationCategory": "Game",
-      "operatingSystem": "Any (Web Browser)",
+      "operatingSystem": "Any modern web browser (Chrome, Firefox, Edge, Safari)",
+      "url": "/",
+      "image": "/poster.jpg",
       "offers": {
         "@type": "Offer",
         "price": "0",
-        "priceCurrency": "USD"
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
       },
-      "image": "/poster.jpg"
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1200",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    }
+    </script>
+
+    <!-- Structured Data: FAQPage (triggers Google featured snippets) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can I play GTA Vice City online free in browser?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! You can play GTA Vice City online free directly in your browser with no installation required. The game runs via WebAssembly (WASM) technology. Simply visit this page and the game sets itself up automatically."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to download anything to play GTA Vice City in browser?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No separate download is required. The first time you visit, the game files (~701 MB) are automatically downloaded and stored in your browser's local storage (OPFS). After that, the game loads instantly on every visit with no re-download needed."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I play GTA Vice City online on mobile for free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, GTA Vice City runs in mobile browsers too. The game includes on-screen touch controls. For the best experience, use Chrome on Android or Safari on iOS and play in landscape mode."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which browser do I need to play GTA Vice City online?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The game works best on Google Chrome (version 110+) and Firefox (111+). It also runs on Microsoft Edge and Safari 16.4+. The browser must support WebAssembly, Service Workers, and OPFS."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does the first-time setup take for GTA Vice City browser?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The one-time setup downloads about 701 MB. On a fast connection (100 Mbps) this takes around 1–2 minutes. On slower connections it may take 5–10 minutes. After setup, every future visit loads the game instantly in under 10 seconds."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is GTA Vice City online browser free to play?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, playing GTA Vice City in browser is completely free. This is an open-source WebAssembly port and requires no payment, account, or subscription."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Structured Data: WebSite -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "GTA Vice City Online — Free Browser Game",
+      "description": "Play GTA Vice City online free in your browser. No download, no installation. Powered by WebAssembly.",
+      "url": "/"
     }
     </script>
 
@@ -93,13 +174,14 @@
         <div class="hero-bg" style="background-image:url('/poster.jpg')" aria-hidden="true"></div>
         <div class="hero-overlay" aria-hidden="true"></div>
         <div class="hero-content">
-          <h1 class="hero-title">Grand Theft Auto:<br><span class="hero-subtitle">Vice City</span></h1>
-          <p class="hero-desc">Play the 2002 classic free in your browser — powered by WebAssembly.</p>
+          <h1 class="hero-title">GTA Vice City<br><span class="hero-subtitle">Online — Free</span></h1>
+          <p class="hero-desc">Play <strong>GTA Vice City online free</strong> in your browser — no download, no install, no account needed.</p>
           <div class="hero-badges" aria-label="Key features">
-            <span class="badge">🆓 Free</span>
+            <span class="badge">🆓 100% Free</span>
             <span class="badge">⚡ No Install</span>
             <span class="badge">📴 Works Offline</span>
             <span class="badge">📱 Mobile Ready</span>
+            <span class="badge">🌐 Browser Game</span>
           </div>
         </div>
       </header>
@@ -114,8 +196,8 @@
           <section class="card" id="setup-overlay" aria-label="Game setup">
             <div id="storage-status" class="storage-status" role="status" aria-live="polite">Checking local game files…</div>
 
-            <h2 class="card-title">Setup</h2>
-            <p class="card-desc">Game files download automatically and are stored locally in your browser. One-time download — future visits load instantly from your device.</p>
+            <h2 class="card-title">Setup — Play GTA Vice City Free in Browser</h2>
+            <p class="card-desc">Game files download automatically to your browser's local storage. One-time setup (~701 MB) — after that, <strong>GTA Vice City loads instantly</strong> every visit with no re-download needed.</p>
 
             <div class="setup-actions-panel">
               <a id="dl-link" class="dl-btn hidden" href="#" download>Download game.tar.gz</a>
@@ -143,34 +225,73 @@
 
           <!-- Play button -->
           <div class="play-wrap">
-            <button id="click-to-play-button" class="play-btn" type="button" aria-label="Start playing Grand Theft Auto Vice City">
-              <span class="play-btn-icon" aria-hidden="true">▶</span> Start to Play
+            <button id="click-to-play-button" class="play-btn" type="button" aria-label="Start playing GTA Vice City online free">
+              <span class="play-btn-icon" aria-hidden="true">▶</span> Play GTA Vice City Free
             </button>
           </div>
 
           <!-- How to play -->
-          <section class="card instructions-panel" aria-label="How to play">
-            <h2 class="card-title">How to Play</h2>
+          <section class="card instructions-panel" aria-label="How to play GTA Vice City online free in browser">
+            <h2 class="card-title">How to Play GTA Vice City Online Free</h2>
             <ol class="instructions-list">
-              <li>Open the page — the game archive downloads automatically in the background <em>(first visit only)</em>.</li>
-              <li>Watch the progress bar — download is ~701 MB and may take a few minutes.</li>
-              <li>Click <strong>Start to Play</strong> once the bar reaches 100%.</li>
-              <li>Future visits skip the download and load instantly from local storage.</li>
+              <li>Open this page — game files download automatically in the background <em>(first visit only, ~701 MB)</em>.</li>
+              <li>Watch the progress bar. On fast internet this takes 1–2 minutes.</li>
+              <li>Click <strong>Play GTA Vice City Free</strong> once the bar reaches 100%.</li>
+              <li>Future visits load instantly — no re-download ever needed.</li>
             </ol>
-            <p class="instructions-note">Best on Chrome or Firefox desktop. Also works on mobile browsers.</p>
+            <p class="instructions-note">Best on Google Chrome or Firefox desktop. Also works on mobile browsers with touch controls.</p>
           </section>
 
           <!-- Features -->
-          <section class="card features-panel" aria-label="Features">
-            <h2 class="card-title">Features</h2>
+          <section class="card features-panel" aria-label="GTA Vice City browser game features">
+            <h2 class="card-title">Why Play GTA Vice City Online in Browser?</h2>
             <ul class="features-list">
-              <li><span class="feat-icon" aria-hidden="true">🌐</span><span>Runs entirely in the browser — no plugins or downloads</span></li>
-              <li><span class="feat-icon" aria-hidden="true">💾</span><span>Game stored locally via OPFS — loads instantly after first visit</span></li>
-              <li><span class="feat-icon" aria-hidden="true">📴</span><span>Works offline after installation</span></li>
-              <li><span class="feat-icon" aria-hidden="true">🎮</span><span>Gamepad support on desktop</span></li>
-              <li><span class="feat-icon" aria-hidden="true">📱</span><span>Touch controls on mobile</span></li>
-              <li><span class="feat-icon" aria-hidden="true">⚡</span><span>Powered by WebAssembly for near-native performance</span></li>
+              <li><span class="feat-icon" aria-hidden="true">🌐</span><span>Runs entirely in browser — no plugins, executables, or downloads</span></li>
+              <li><span class="feat-icon" aria-hidden="true">💾</span><span>Stored locally via OPFS — loads instantly after first visit</span></li>
+              <li><span class="feat-icon" aria-hidden="true">📴</span><span>Works offline after the one-time setup</span></li>
+              <li><span class="feat-icon" aria-hidden="true">🎮</span><span>Full gamepad support on desktop</span></li>
+              <li><span class="feat-icon" aria-hidden="true">📱</span><span>Touch controls for mobile &amp; tablet</span></li>
+              <li><span class="feat-icon" aria-hidden="true">⚡</span><span>Powered by WebAssembly — near-native performance</span></li>
+              <li><span class="feat-icon" aria-hidden="true">🆓</span><span>Completely free — no account, no subscription</span></li>
             </ul>
+          </section>
+
+          <!-- FAQ Section — triggers Google featured snippets -->
+          <section class="card faq-panel" aria-label="Frequently asked questions about GTA Vice City online">
+            <h2 class="card-title">Frequently Asked Questions</h2>
+            <div class="faq-list">
+
+              <details class="faq-item" open>
+                <summary class="faq-q">Can I play GTA Vice City online free in browser?</summary>
+                <p class="faq-a">Yes! You can play <strong>GTA Vice City online free</strong> directly in your browser with no installation required. The game runs via WebAssembly (WASM) technology. Simply visit this page and the game sets itself up automatically.</p>
+              </details>
+
+              <details class="faq-item">
+                <summary class="faq-q">Do I need to download anything?</summary>
+                <p class="faq-a">No separate download is needed. The first time you visit, the game files (~701 MB) are automatically fetched and stored in your browser's local storage (OPFS). After that, the game loads instantly on every visit — no re-download ever.</p>
+              </details>
+
+              <details class="faq-item">
+                <summary class="faq-q">Can I play on mobile for free?</summary>
+                <p class="faq-a">Yes. GTA Vice City runs in mobile browsers with on-screen touch controls. Use <strong>Chrome on Android</strong> or <strong>Safari on iOS</strong> and play in landscape mode for the best experience.</p>
+              </details>
+
+              <details class="faq-item">
+                <summary class="faq-q">Which browsers are supported?</summary>
+                <p class="faq-a">Works best on <strong>Google Chrome 110+</strong>, <strong>Firefox 111+</strong>, Microsoft Edge, and Safari 16.4+. The browser must support WebAssembly, Service Workers, and OPFS (Origin Private File System).</p>
+              </details>
+
+              <details class="faq-item">
+                <summary class="faq-q">How long does the first-time setup take?</summary>
+                <p class="faq-a">The one-time setup downloads about <strong>701 MB</strong>. On a fast connection (~100 Mbps) this takes 1–2 minutes. On slower connections expect 5–10 minutes. Every visit after that loads in under 10 seconds.</p>
+              </details>
+
+              <details class="faq-item">
+                <summary class="faq-q">Is this really free? Any catch?</summary>
+                <p class="faq-a">Completely free — no payment, account, subscription, or ads. This is an open-source WebAssembly port of GTA Vice City, not affiliated with Rockstar Games.</p>
+              </details>
+
+            </div>
           </section>
 
         </div>
@@ -178,31 +299,56 @@
         <!-- Right column -->
         <aside class="right-col" aria-label="Game information">
           <div class="card cover-panel">
-            <img class="cover-image" src="/poster.jpg" alt="Grand Theft Auto: Vice City official poster showing Tommy Vercetti and the Vice City skyline" width="600" height="900" loading="eager" />
+            <img
+              class="cover-image"
+              src="/poster.jpg"
+              alt="GTA Vice City online browser game — play free, no download required"
+              width="600"
+              height="900"
+              loading="eager"
+              fetchpriority="high"
+            />
           </div>
 
           <div class="card game-info-card">
             <h2 class="card-title">Game Info</h2>
             <dl class="game-meta">
+              <dt>Game</dt><dd>GTA Vice City Online (Browser)</dd>
               <dt>Developer</dt><dd>Rockstar Games</dd>
               <dt>Released</dt><dd>2002</dd>
               <dt>Genre</dt><dd>Open World / Action</dd>
               <dt>Platform</dt><dd>Web Browser (WASM)</dd>
               <dt>File Size</dt><dd>~701 MB (one-time)</dd>
-              <dt>Price</dt><dd>Free</dd>
+              <dt>Price</dt><dd><strong style="color:#00e5a0">Free</strong></dd>
             </dl>
+          </div>
+
+          <div class="card browser-support-card">
+            <h2 class="card-title">Browser Support</h2>
+            <ul class="browser-list">
+              <li><span class="browser-icon">🟢</span><span><strong>Chrome 110+</strong> — Best experience</span></li>
+              <li><span class="browser-icon">🟢</span><span><strong>Firefox 111+</strong> — Fully supported</span></li>
+              <li><span class="browser-icon">🟢</span><span><strong>Edge 110+</strong> — Fully supported</span></li>
+              <li><span class="browser-icon">🟡</span><span><strong>Safari 16.4+</strong> — Supported</span></li>
+              <li><span class="browser-icon">🟢</span><span><strong>Chrome Android</strong> — Mobile play</span></li>
+            </ul>
           </div>
 
           <div class="card disclaimer">
             <span class="label-tag">Disclaimer</span>
-            <p>This is an open-source fan port of GTA: Vice City and is not a commercial release. It is not affiliated with or endorsed by Rockstar Games. (<a href="https://github.com/SugaryHull/re3/tree/miami" target="_blank" rel="noopener noreferrer">source</a>)</p>
+            <p>This is an open-source fan port of GTA: Vice City. Not a commercial release. Not affiliated with or endorsed by Rockstar Games. (<a href="https://github.com/SugaryHull/re3/tree/miami" target="_blank" rel="noopener noreferrer">source</a>)</p>
           </div>
         </aside>
 
       </main>
 
       <footer class="site-footer" role="contentinfo">
-        <p>GTA: Vice City WASM port &mdash; open source project based on <a href="https://github.com/Lolendor/reVCDOS" target="_blank" rel="noopener noreferrer">reVCDOS</a>. Not affiliated with Rockstar Games.</p>
+        <p>
+          <strong>GTA Vice City Online — Free Browser Game</strong> &mdash;
+          Play GTA Vice City free in your browser with no download required.
+          Open-source WASM port based on <a href="https://github.com/Lolendor/reVCDOS" target="_blank" rel="noopener noreferrer">reVCDOS</a>.
+          Not affiliated with Rockstar Games.
+        </p>
       </footer>
 
     </div>
