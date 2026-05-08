@@ -1,0 +1,21 @@
+[build]
+  command = "pnpm run build"
+  publish = "dist"
+
+[build.environment]
+  VITE_ASSET_URL = "https://archive.org/download/gta-vicecity-wasm-assets/game.tar.gz"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Embedder-Policy = "require-corp"
+    Cross-Origin-Resource-Policy = "cross-origin"
+
+[[redirects]]
+  from = "/proxy-game-download/*"
+  to = "https://archive.org/download/gta-vicecity-wasm-assets/:splat"
+  status = 200
+  force = true
+  [redirects.headers]
+    Access-Control-Allow-Origin = "*"
