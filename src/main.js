@@ -321,10 +321,10 @@ async function initSetupFlow() {
               const speed = elapsedSec > 0 ? msg.loaded / elapsedSec : 0;
               const remainingSec = speed > 0 ? (msg.total - msg.loaded) / speed : Infinity;
               const eta = formatTimeRemaining(remainingSec);
-              const label = msg.phase === "reading" ? "Reading" : "Downloading";
+              const label = msg.phase === "reading" ? "Reading" : "Loading";
               progressLabel.textContent = `${label}… ${loadedMB} MB / ${totalMB} MB${eta ? "  •  " + eta : ""}`;
             } else {
-              progressLabel.textContent = "Connecting to download server…";
+              progressLabel.textContent = "Connecting to server…";
             }
           } else if (msg.phase === "decompressing") {
             progressLabel.textContent = "Decompressing archive…";
@@ -338,7 +338,7 @@ async function initSetupFlow() {
               const remainingSec = elapsedSec > 0 ? (elapsedSec / done) * (total - done) : Infinity;
               eta = formatTimeRemaining(remainingSec);
             }
-            progressLabel.textContent = `Installing files… ${done} / ${total || ""}${eta ? "  •  " + eta : ""}`;
+            progressLabel.textContent = `Extracting files… ${done} / ${total || ""}${eta ? "  •  " + eta : ""}`;
           }
           return;
         }
@@ -346,15 +346,15 @@ async function initSetupFlow() {
         if (msg.type === "done") {
           progressBar.style.width = "100%";
           progressPercent.textContent = "100%";
-          progressLabel.textContent = "Verifying installation…";
+          progressLabel.textContent = "Verifying…";
           const { ready: isReady, reason } = await waitForGameReady();
           setStorageStatus(
-            isReady ? "Ready to play" : "Installation failed",
+            isReady ? "Ready to play" : "Setup failed",
             isReady ? "ready" : "missing",
           );
           setPlayAvailability(isReady);
           progressLabel.textContent = isReady
-            ? "Installation complete — starting game…"
+            ? "Setup complete — starting game…"
             : `Verification failed: ${reason}`;
           worker.terminate();
           resolve();
@@ -412,7 +412,7 @@ async function initSetupFlow() {
     return;
   }
 
-  setStorageStatus("Downloading game…", "downloading");
+  setStorageStatus("Loading game…", "downloading");
 
   if (ASSET_RELEASE_URL) {
     const downloadUrl = `${BASE}proxy-game-download/game.tar.gz`;

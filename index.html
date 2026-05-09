@@ -167,7 +167,7 @@
         <div class="progress-bar-container" id="spinner">
           <div class="progress-bar-fill"></div>
         </div>
-        <div id="status">Downloading...</div>
+        <div id="status">Loading...</div>
         <div><progress id="progress"></progress></div>
       </div>
     </div>
@@ -196,17 +196,41 @@
         <div class="hero-bg" style="background-image:url('/hero-bg.jpg')" aria-hidden="true"></div>
         <div class="hero-overlay" aria-hidden="true"></div>
         <div class="hero-content">
+          <div class="hero-eyebrow">WebAssembly &bull; Runs In Browser</div>
           <h1 class="hero-title">GTA Vice City<br><span class="hero-subtitle">Online — Play Free</span></h1>
           <p class="hero-desc">The #1 <strong>GTA Vice City online game</strong> — play online free in your browser right now. No download, no install, no account.</p>
           <div class="hero-badges" aria-label="Key features">
+            <span class="badge badge-primary">▶ Play Online Now</span>
             <span class="badge">🆓 100% Free</span>
-            <span class="badge">▶ Play Online Now</span>
-            <span class="badge">⚡ No Download</span>
+            <span class="badge">⚡ Instant After Setup</span>
             <span class="badge">📴 Works Offline</span>
             <span class="badge">📱 Mobile Ready</span>
           </div>
         </div>
       </header>
+
+      <!-- Stats bar -->
+      <div class="stats-bar" aria-label="Key statistics">
+        <div class="stat-item">
+          <span class="stat-value">701 MB</span>
+          <span class="stat-label">One-time setup</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <span class="stat-value">~2 min</span>
+          <span class="stat-label">Fast connection</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <span class="stat-value">Free</span>
+          <span class="stat-label">No account needed</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item">
+          <span class="stat-value">PC + Mobile</span>
+          <span class="stat-label">All devices</span>
+        </div>
+      </div>
 
       <!-- Main content -->
       <main class="main-grid" id="main-content">
@@ -233,7 +257,7 @@
 
             <div id="setup-progress" class="setup-progress hidden" role="region" aria-label="Download progress">
               <div class="setup-progress-head">
-                <span class="setup-progress-title">Downloading &amp; Installing</span>
+                <span class="setup-progress-title">Loading &amp; Extracting</span>
                 <span id="setup-progress-percent" class="setup-progress-percent" aria-live="polite">0%</span>
               </div>
               <p id="setup-progress-label" class="setup-progress-label" aria-live="polite">Preparing&hellip;</p>
