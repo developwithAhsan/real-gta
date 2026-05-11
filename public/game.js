@@ -171,9 +171,12 @@ async function startGame(e) {
         await document.documentElement.requestFullscreen().catch(() => {});
     }
 
-    document.querySelector('.start-container').style.display = 'none';
-    document.querySelector('.disclaimer').style.display = 'none';
-    document.querySelector('.developed-by').style.display = 'none';
+    const startContainer = document.querySelector('.start-container');
+    if (startContainer) startContainer.style.display = 'none';
+    const disclaimerEl = document.querySelector('.disclaimer');
+    if (disclaimerEl) disclaimerEl.style.display = 'none';
+    const developedByEl = document.querySelector('.developed-by');
+    if (developedByEl) developedByEl.style.display = 'none';
 
     const intro = document.querySelector('.intro');
     const introContainer = document.querySelector('.intro-container');
@@ -516,12 +519,12 @@ const cloudSavesLink = document.getElementById('cloud-saves-link');
 if (cloudSavesLink) cloudSavesLink.textContent = t('cloudSaves');
 if (cloudSavesStatus) cloudSavesStatus.textContent = t('enterKey');
 const disclaimerText = document.getElementById('disclaimer-text');
-disclaimerText.textContent = t('disclaimer');
+if (disclaimerText) disclaimerText.textContent = t('disclaimer');
 const disclaimerSources = document.getElementById('disclaimer-sources');
-disclaimerSources.textContent = t('disclaimerSources');
+if (disclaimerSources) disclaimerSources.textContent = t('disclaimerSources');
 const developedBy = document.querySelector('.developed-by');
 const ruTranslate = t('ruTranslate');
-if (ruTranslate) developedBy.innerHTML += ruTranslate;
+if (ruTranslate && developedBy) developedBy.innerHTML += ruTranslate;
 const portBy = document.getElementById('port-by');
 if (portBy) portBy.textContent = t('portBy');
 
