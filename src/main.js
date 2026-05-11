@@ -416,8 +416,8 @@ async function initSetupFlow() {
 const downloadUrl = import.meta.env.DEV
   ? `${BASE}proxy-game-download/game.tar.gz`
   : ASSET_RELEASE_URL;
-  
-  setStorageStatus("Loading game…", "downloading");
+
+...
 
   if (ASSET_RELEASE_URL) {
     const downloadUrl = import.meta.env.DEV
