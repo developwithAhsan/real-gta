@@ -68,6 +68,9 @@ function gameDownloadPlugin() {
 export default defineConfig({
   base: "/",
   plugins: [gameDownloadPlugin()],
+  define: {
+    __IS_VERCEL__: JSON.stringify(!!process.env.VERCEL),
+  },
   server: {
     host: true,
     port: 5000,
