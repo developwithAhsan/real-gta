@@ -415,9 +415,24 @@ async function initSetupFlow() {
   setStorageStatus("Loading game…", "downloading");
 
   if (ASSET_RELEASE_URL) {
-    const downloadUrl = import.meta.env.DEV
-      ? `${BASE}proxy-game-download/game.tar.gz`
-      : (__IS_VERCEL__ ? `/api/proxy` : `${BASE}proxy-game-download/game.tar.gz`);
+    // On dev: Vite proxy handles CORS for any URL.
+    // On Vercel: use /api/proxy UNLESS a custom VITE_ASSET_URL is explicitly set
+    //   (custom URL is assumed CORS-friendly, e.g. GitHub Releases, R2, etc.)
+    // On Netlify/other: netlify redirect proxy handles CORS for any URL.
+    const DEFAULT_ARCHIVE_URL = 'https://archive.org/download/gta-vicecity-wasm-assets/game.tar.gz';
+    const hasCustomUrl = import.meta.env.VITE_ASSET_URL && import.meta.env.VITE_ASSET_URL !== DEFAULT_ARCHIVE_URL;
+
+    let downloadUrl;
+    if (import.meta.env.DEV) {
+      downloadUrl = `${BASE}proxy-game-download/game.tar.gz`;
+    } else if (hasCustomUrl) {
+      downloadUrl = import.meta.env.VITE_ASSET_URL;
+    } else if (__IS_VERCEL__) {
+      downloadUrl = `/api/proxy`;
+    } else {
+      downloadUrl = `${BASE}proxy-game-download/game.tar.gz`;
+    }
+
     console.log("[setup] auto-downloading game from:", downloadUrl);
     await runImport(null, downloadUrl);
   } else {
