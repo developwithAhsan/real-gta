@@ -1,4 +1,3 @@
-
 const ASSET_RELEASE_URL = import.meta.env.VITE_ASSET_URL || "https://archive.org/download/gta-vicecity-wasm-assets/game.tar.gz";
 
 const BASE = import.meta.env.BASE_URL;
@@ -413,16 +412,12 @@ async function initSetupFlow() {
     return;
   }
 
-const downloadUrl = import.meta.env.DEV
-  ? `${BASE}proxy-game-download/game.tar.gz`
-  : ASSET_RELEASE_URL;
-
-...
+  setStorageStatus("Loading game…", "downloading");
 
   if (ASSET_RELEASE_URL) {
     const downloadUrl = import.meta.env.DEV
       ? `${BASE}proxy-game-download/game.tar.gz`
-      : ASSET_RELEASE_URL;
+      : (__IS_VERCEL__ ? `/api/proxy` : `${BASE}proxy-game-download/game.tar.gz`);
     console.log("[setup] auto-downloading game from:", downloadUrl);
     await runImport(null, downloadUrl);
   } else {
