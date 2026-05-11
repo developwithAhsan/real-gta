@@ -1,15 +1,14 @@
 export const config = { runtime: 'edge' };
 
-const ARCHIVE_URL = 'https://archive.org/download/gta-vicecity-wasm-assets/game.tar.gz';
-
-// Fallback CDN URL — the CDN nginx has no bot-detection, unlike archive.org's main server.
-// Resolved from: curl -sI https://archive.org/download/gta-vicecity-wasm-assets/game.tar.gz
-const FALLBACK_CDN_URL = 'https://dn710903.ca.archive.org/0/items/gta-vicecity-wasm-assets/game.tar.gz';
+// Use the archive.org item server directly — different infrastructure from the CDN nginx
+// that blocks cloud provider IPs. Redirect: follow handles the 301 within the same domain.
+// Primary: ia801606 redirects 301 → ia601606/25/items/...
+const PRIMARY_URL = 'https://ia801606.us.archive.org/0/items/gta-vicecity-wasm-assets/game.tar.gz';
+const FALLBACK_URL = 'https://ia601606.us.archive.org/25/items/gta-vicecity-wasm-assets/game.tar.gz';
 
 const FETCH_HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
   'Accept': 'application/octet-stream, */*',
-  'Accept-Language': 'en-US,en;q=0.9',
 };
 
 const CORS_HEADERS = {
@@ -19,20 +18,13 @@ const CORS_HEADERS = {
   'Cross-Origin-Resource-Policy': 'cross-origin',
 };
 
-async function resolveCdnUrl() {
-  try {
-    // Try redirect: 'manual' to capture the 302 Location header
-    const resp = await fetch(ARCHIVE_URL, {
-      method: 'HEAD',
-      headers: FETCH_HEADERS,
-      redirect: 'manual',
-    });
-    const location = resp.headers.get('location');
-    if (location && location.startsWith('https://')) return location;
-  } catch (_) {}
-
-  // Fallback: use the known CDN URL directly
-  return FALLBACK_CDN_URL;
+async function fetchUpstream(url, method) {
+  const resp = await fetch(url, {
+    method,
+    headers: FETCH_HEADERS,
+    redirect: 'follow',
+  });
+  return resp;
 }
 
 export default async function handler(request) {
@@ -40,25 +32,27 @@ export default async function handler(request) {
     return new Response(null, { status: 204, headers: CORS_HEADERS });
   }
 
-  try {
-    const cdnUrl = await resolveCdnUrl();
+  const method = request.method === 'HEAD' ? 'HEAD' : 'GET';
 
-    const upstream = await fetch(cdnUrl, {
-      method: request.method === 'HEAD' ? 'HEAD' : 'GET',
-      headers: FETCH_HEADERS,
-    });
+  try {
+    let upstream = await fetchUpstream(PRIMARY_URL, method);
+
+    // If primary fails or returns HTML, try fallback
+    const contentType = upstream.headers.get('content-type') || '';
+    if (!upstream.ok || contentType.includes('text/html')) {
+      upstream = await fetchUpstream(FALLBACK_URL, method);
+    }
 
     if (!upstream.ok) {
-      return new Response(`CDN error ${upstream.status}: ${cdnUrl}`, {
+      return new Response(`Upstream error ${upstream.status}`, {
         status: 502,
         headers: CORS_HEADERS,
       });
     }
 
-    // Guard: if upstream returned HTML (bot block / error page), fail clearly.
     const upstreamType = upstream.headers.get('content-type') || '';
     if (upstreamType.includes('text/html')) {
-      return new Response(`CDN returned HTML instead of binary: ${cdnUrl}`, {
+      return new Response('Upstream returned HTML — all CDN servers appear blocked', {
         status: 502,
         headers: CORS_HEADERS,
       });
@@ -66,11 +60,10 @@ export default async function handler(request) {
 
     const respHeaders = new Headers(CORS_HEADERS);
     respHeaders.set('Content-Type', 'application/octet-stream');
-
     const contentLength = upstream.headers.get('content-length');
     if (contentLength) respHeaders.set('Content-Length', contentLength);
 
-    if (request.method === 'HEAD') {
+    if (method === 'HEAD') {
       return new Response(null, { status: 200, headers: respHeaders });
     }
 
