@@ -1075,7 +1075,7 @@ a:hover { color: #fff; }
 }
 
 /* ─── Rotate overlay ──────────────────────────────────────── */
-*/
+
 .rotate-overlay { display: none; }
 
 @media (orientation: portrait) {
@@ -1118,7 +1118,7 @@ a:hover { color: #fff; }
   100% { transform: rotate(90deg); }
 }
 
-* ─── Wasted ──────────────────────────────────────────────── */
+/*─── Wasted ──────────────────────────────────────────────── */
 .wasted-container {
   position: absolute;
   inset: 0;
