@@ -1075,41 +1075,73 @@ a:hover { color: #fff; }
 }
 
 /* ─── Rotate overlay ──────────────────────────────────────── */
+*/
 .rotate-overlay { display: none; }
 
 @media (orientation: portrait) {
   .gameIsStarted[data-is-touch="1"] .rotate-overlay {
     display: flex;
     position: fixed;
-    inset: 0 0 auto;
-    z-index: 9999;
-    background: rgba(0,0,0,0.75);
-    padding: 12px 20px;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(6, 8, 15, 0.97);
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 20px;
     color: #f6fbff;
-    font-size: 0.9rem;
-    backdrop-filter: blur(6px);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 32px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 }
 
 .rotate-overlay-icon {
-  font-size: 1.2rem;
-  animation: spin-hint 2s ease-in-out infinite;
-}
-@keyframes spin-hint {
-  0%, 100% { transform: rotate(0deg); }
-  50%       { transform: rotate(90deg); }
+  font-size: 3.5rem;
+  line-height: 1;
+  animation: spin-hint 1.8s ease-in-out infinite;
 }
 
-/* ─── Wasted ──────────────────────────────────────────────── */
+.rotate-overlay span:last-child {
+  color: var(--text-2);
+  font-size: 0.9rem;
+  font-weight: 400;
+  max-width: 240px;
+}
+
+@keyframes spin-hint {
+  0%   { transform: rotate(0deg); }
+  40%  { transform: rotate(90deg); }
+  100% { transform: rotate(90deg); }
+}
+
+* ─── Wasted ──────────────────────────────────────────────── */
 .wasted-container {
   position: absolute;
   inset: 0;
   z-index: 10000;
   background: url(https://cdn.dos.zone/vcsky/wasted.png) center/cover no-repeat;
 }
+
+/* ─── Mobile game optimisations ──────────────────────────── */
+body.gameIsStarted canvas.emscripten,
+body.gameIsStarted .touch-controls-wrapper,
+body.gameIsStarted .touch-control {
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body.gameIsStarted {
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ─── Touch controls ───────────────────────────────
 
 /* ─── Touch controls ──────────────────────────────────────── */
 .touch-controls-wrapper {
