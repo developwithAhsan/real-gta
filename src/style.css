@@ -61,6 +61,13 @@ body::before {
 
 body.gameIsStarted {
   background: #000 !important;
+    overflow: hidden;
+  height: 100dvh;
+  width: 100vw;
+}
+
+body.gameIsStarted::before {
+  display: none;
 }
 
 body.gameIsStarted .page-wrap {
