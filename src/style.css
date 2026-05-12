@@ -78,8 +78,18 @@ body.gameIsStarted canvas.emscripten {
   position: fixed;
   z-index: 500;
   inset: 0;
-  width: 100% !important;
-  height: 100% !important;
+      width: 100vw !important;
+  height: 100dvh !important;
+  display: block;
+}
+
+body.gameIsStarted .intro-container {
+  position: fixed;
+  z-index: 498;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  background: #000;
 }
 
 a {
